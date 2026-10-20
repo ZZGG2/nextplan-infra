@@ -1,0 +1,39 @@
+# /etc/systemd/system/nextplan.service
+# 당시 EC2에 등록했던 유닛 파일 (2026-05-05 적용). 시크릿 값은 마스킹.
+#
+# 적용:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable nextplan
+#   sudo systemctl start nextplan
+#
+# 운영 중 확인:
+#   sudo systemctl status nextplan             # restart counter 값까지 확인할 것
+#   sudo journalctl -u nextplan -n 100 --no-pager
+#   sudo journalctl -u nextplan | grep "ERROR\|Caused by"
+
+[Unit]
+Description=NextPlan Spring Boot App
+After=network.target
+
+[Service]
+User=ubuntu
+ExecStart=/usr/bin/java -jar /home/ubuntu/app/NextPlan-0.0.1-SNAPSHOT.jar \
+  --DB_URL=jdbc:postgresql://<rds-endpoint>.ap-northeast-2.rds.amazonaws.com:5432/nextplan \
+  --DB_USERNAME=<masked> \
+  --DB_PASSWORD=<masked> \
+  --JWT_SECRET=<masked> \
+  --KAKAO_REDIRECT_URI=https://<cloudfront-domain>/auth/kakao/callback
+# Spring Boot는 SIGTERM 종료 시 143으로 끝나므로 정상 종료로 간주
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+# ------------------------------------------------------------------
+# 회고: 시크릿을 ExecStart 인자로 넘기면 `ps aux`, `systemctl status`
+# 출력에 평문으로 노출된다 (실제로 status 출력에 DB_URL이 보였음).
+# 개선안 → EnvironmentFile=/etc/nextplan/env (chmod 600) 또는
+#          SSM Parameter Store에서 IAM Role로 조회.
+# ------------------------------------------------------------------

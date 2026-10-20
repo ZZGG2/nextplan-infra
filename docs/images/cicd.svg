@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 330" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <style>.t{font-size:14px;font-weight:700;fill:#0f172a}.s{font-size:12px;fill:#475569}.ln{stroke:#475569;stroke-width:1.8;marker-end:url(#a)}</style>
+  </defs>
+  <rect width="1100" height="330" fill="#ffffff"/>
+  <text x="30" y="36" font-size="19" font-weight="800" fill="#0f172a">CI/CD Pipelines · GitHub Actions</text>
+
+  <text x="30" y="82" class="t" fill="#059669">Frontend (MJU-KAP/Front)</text>
+  <g>
+    <rect x="30" y="95" width="180" height="62" rx="10" fill="#f1f5f9" stroke="#94a3b8"/><text x="120" y="122" text-anchor="middle" class="t">push → main</text><text x="120" y="141" text-anchor="middle" class="s">트리거</text>
+    <rect x="250" y="95" width="200" height="62" rx="10" fill="#ecfdf5" stroke="#10b981"/><text x="350" y="122" text-anchor="middle" class="t">npm run build</text><text x="350" y="141" text-anchor="middle" class="s">VITE_* ← Secrets</text>
+    <rect x="490" y="95" width="200" height="62" rx="10" fill="#ecfdf5" stroke="#10b981"/><text x="590" y="122" text-anchor="middle" class="t">aws s3 sync --delete</text><text x="590" y="141" text-anchor="middle" class="s">이전 빌드 잔여물 제거</text>
+    <rect x="730" y="95" width="230" height="62" rx="10" fill="#f5f3ff" stroke="#8b5cf6"/><text x="845" y="122" text-anchor="middle" class="t">CloudFront Invalidation</text><text x="845" y="141" text-anchor="middle" class="s">/* 전체 캐시 무효화</text>
+    <line x1="210" y1="126" x2="246" y2="126" class="ln"/><line x1="450" y1="126" x2="486" y2="126" class="ln"/><line x1="690" y1="126" x2="726" y2="126" class="ln"/>
+  </g>
+
+  <text x="30" y="212" class="t" fill="#ea580c">Backend (MJU-KAP/Back)</text>
+  <g>
+    <rect x="30" y="225" width="180" height="62" rx="10" fill="#f1f5f9" stroke="#94a3b8"/><text x="120" y="252" text-anchor="middle" class="t">push → main</text><text x="120" y="271" text-anchor="middle" class="s">트리거</text>
+    <rect x="250" y="225" width="200" height="62" rx="10" fill="#fff7ed" stroke="#f97316"/><text x="350" y="252" text-anchor="middle" class="t">JDK 17 · Gradle</text><text x="350" y="271" text-anchor="middle" class="s">clean build</text>
+    <rect x="490" y="225" width="200" height="62" rx="10" fill="#fff7ed" stroke="#f97316"/><text x="590" y="252" text-anchor="middle" class="t">SCP → EC2</text><text x="590" y="271" text-anchor="middle" class="s">/home/ubuntu/app</text>
+    <rect x="730" y="225" width="230" height="62" rx="10" fill="#fff7ed" stroke="#f97316"/><text x="845" y="252" text-anchor="middle" class="t">systemctl restart</text><text x="845" y="271" text-anchor="middle" class="s">plain.jar 정리 후 재시작</text>
+    <line x1="210" y1="256" x2="246" y2="256" class="ln"/><line x1="450" y1="256" x2="486" y2="256" class="ln"/><line x1="690" y1="256" x2="726" y2="256" class="ln"/>
+  </g>
+  <text x="985" y="122" class="s">→ S3 / CloudFront</text>
+  <text x="985" y="256" class="s">→ EC2</text>
+</svg>

@@ -1,0 +1,38 @@
+# MJU-KAP/Back src/main/resources/application.yml 중 인프라/운영 관련 부분 발췌
+# 원칙: 환경 의존 값은 전부 ${ENV} 플레이스홀더, 코드에는 안전한 기본값만
+
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB        # 기본 1MB → 이력서 업로드용 상향 (2026-05-26)
+      max-request-size: 50MB
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:validate}   # 운영 DB 스키마를 앱이 바꾸지 못하게 고정
+    open-in-view: false
+
+app:
+  secure-cookie: ${SECURE_COOKIE:false}
+  cors:
+    allowed-origins:                       # 로컬 개발 + CloudFront 도메인만 허용
+      - http://localhost:5173
+      - https://<cloudfront-domain>
+
+jwt:
+  secret: ${JWT_SECRET}
+
+aws:
+  s3:
+    bucket-name: ${AWS_BUCKET_NAME:nextplan-resume}
+    region: ${AWS_REGION:ap-northeast-2}
+    # Access Key 설정 없음 → AWS SDK 기본 Credential Provider Chain 사용
+
+ai:
+  server-url: ${AI_SERVER_URL}             # Colab AI 서버 (ngrok 고정 도메인)

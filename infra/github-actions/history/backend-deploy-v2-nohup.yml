@@ -1,0 +1,62 @@
+# 히스토리 보관용: v2 시크릿 인자 전달 버전 (2026-05-05, 4efb17d)
+# 문제: 시크릿 추가마다 워크플로 수정, 프로세스 종료 시 자동 복구 없음 → v4에서 systemd로 전환
+
+name: Backend Deploy (EC2)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
+
+      - name: Copy JAR to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "build/libs/*.jar"
+          target: "/home/ubuntu/app"
+          strip_components: 2
+
+      - name: Run Application on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 기존 프로세스 종료
+            fuser -k 8080/tcp || true
+            rm -f /home/ubuntu/app/*-plain.jar
+            # /home/ubuntu/app 폴더에 있는 유일한 jar 파일을 실행
+            nohup java -jar /home/ubuntu/app/*.jar \
+              --DB_URL='${{ secrets.DB_URL }}' \
+              --DB_USERNAME='${{ secrets.DB_USERNAME }}' \
+              --DB_PASSWORD='${{ secrets.DB_PASSWORD }}' \
+              --JWT_SECRET='${{ secrets.JWT_SECRET }}' \
+              --KAKAO_REDIRECT_URI='${{ secrets.KAKAO_REDIRECT_URI }}' \
+              --SERVER_PORT='8080' \
+              --SECURE_COOKIE='false' \
+              --COOKIE_SAME_SITE='Lax' \
+              > /home/ubuntu/app/app.log 2>&1 &

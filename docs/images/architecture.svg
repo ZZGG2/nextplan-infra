@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 700" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+    <style>
+      .t{font-size:15px;font-weight:700;fill:#0f172a}
+      .s{font-size:12px;fill:#475569}
+      .l{font-size:12px;fill:#334155}
+      .ln{stroke:#475569;stroke-width:1.8;fill:none;marker-end:url(#a)}
+      .cd{stroke:#7c3aed;stroke-width:1.6;fill:none;stroke-dasharray:6 4;marker-end:url(#g)}
+    </style>
+  </defs>
+  <rect width="1160" height="700" fill="#ffffff"/>
+  <text x="30" y="38" font-size="20" font-weight="800" fill="#0f172a">NextPlan AWS Architecture</text>
+  <text x="30" y="60" class="s">ap-northeast-2 · 2026.04 ~ 2026.06</text>
+
+  <!-- User -->
+  <rect x="30" y="250" width="110" height="70" rx="12" fill="#f1f5f9" stroke="#94a3b8"/>
+  <text x="85" y="282" text-anchor="middle" class="t">User</text>
+  <text x="85" y="302" text-anchor="middle" class="s">Browser</text>
+
+  <!-- CloudFront + WAF -->
+  <rect x="190" y="215" width="170" height="140" rx="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="275" y="248" text-anchor="middle" class="t">CloudFront</text>
+  <text x="275" y="268" text-anchor="middle" class="s">HTTPS 단일 진입점</text>
+  <rect x="210" y="285" width="130" height="52" rx="8" fill="#fee2e2" stroke="#ef4444"/>
+  <text x="275" y="307" text-anchor="middle" class="t" font-size="14">AWS WAF</text>
+  <text x="275" y="325" text-anchor="middle" class="s">Core Rule Set</text>
+
+  <!-- S3 static -->
+  <rect x="450" y="90" width="210" height="80" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="555" y="122" text-anchor="middle" class="t">S3 · 정적 호스팅</text>
+  <text x="555" y="143" text-anchor="middle" class="s">React(Vite) 빌드 결과물</text>
+
+  <!-- VPC -->
+  <rect x="430" y="215" width="420" height="300" rx="14" fill="#f8fafc" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="448" y="240" class="l" font-weight="700" fill="#0369a1">VPC</text>
+  <!-- EC2 -->
+  <rect x="455" y="255" width="240" height="135" rx="12" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="575" y="280" text-anchor="middle" class="t">EC2 · Ubuntu</text>
+  <rect x="470" y="295" width="90" height="75" rx="8" fill="#ffffff" stroke="#fdba74"/>
+  <text x="515" y="328" text-anchor="middle" class="l" font-weight="700">Nginx</text>
+  <text x="515" y="347" text-anchor="middle" class="s">:80 proxy</text>
+  <rect x="590" y="295" width="95" height="75" rx="8" fill="#ffffff" stroke="#fdba74"/>
+  <text x="637" y="322" text-anchor="middle" class="l" font-weight="700">Spring Boot</text>
+  <text x="637" y="340" text-anchor="middle" class="s">:8080</text>
+  <text x="637" y="357" text-anchor="middle" class="s">systemd</text>
+  <path d="M560,332 L586,332" class="ln"/>
+  <!-- RDS -->
+  <rect x="455" y="420" width="240" height="70" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="575" y="450" text-anchor="middle" class="t">RDS · PostgreSQL</text>
+  <text x="575" y="470" text-anchor="middle" class="s">ddl-auto: validate</text>
+  <path d="M637,370 L637,395 L600,395 L600,416" class="ln"/>
+
+  <!-- S3 resume -->
+  <rect x="900" y="215" width="220" height="90" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="1010" y="245" text-anchor="middle" class="t">S3 · nextplan-resume</text>
+  <text x="1010" y="265" text-anchor="middle" class="s">Private 버킷</text>
+  <text x="1010" y="284" text-anchor="middle" class="s">Presigned GET (30분)</text>
+
+  <!-- ngrok + Colab -->
+  <rect x="900" y="360" width="220" height="60" rx="12" fill="#f1f5f9" stroke="#64748b"/>
+  <text x="1010" y="387" text-anchor="middle" class="t">ngrok</text>
+  <text x="1010" y="405" text-anchor="middle" class="s">고정 도메인 · HTTPS</text>
+  <rect x="900" y="450" width="220" height="65" rx="12" fill="#fefce8" stroke="#eab308" stroke-width="1.5"/>
+  <text x="1010" y="478" text-anchor="middle" class="t">Google Colab</text>
+  <text x="1010" y="497" text-anchor="middle" class="s">AI 분석 서버 (uvicorn)</text>
+
+  <!-- traffic arrows -->
+  <path d="M140,285 L186,285" class="ln"/>
+  <path d="M275,215 L275,130 L446,130" class="ln"/>
+  <text x="290" y="122" class="l">/* (default)</text>
+  <path d="M360,330 L466,330" class="ln"/>
+  <text x="372" y="320" class="l">/api/*</text>
+  <path d="M685,315 L896,260" class="ln"/>
+  <text x="725" y="268" class="l">PutObject · Presign</text>
+  <path d="M685,355 L896,390" class="ln"/>
+  <text x="712" y="415" class="l">POST /api/analyze (비동기)</text>
+  <path d="M1010,420 L1010,446" class="ln"/>
+  <path d="M1110,450 L1110,309" class="ln"/>
+  <text x="1040" y="440" class="s" text-anchor="end"></text>
+  <text x="1138" y="380" class="s" transform="rotate(90 1138 380)" text-anchor="middle">Presigned URL로 조회</text>
+
+  <!-- GitHub Actions -->
+  <rect x="190" y="580" width="560" height="90" rx="12" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="210" y="607" class="t">GitHub Actions</text>
+  <text x="210" y="630" class="s">Front: npm build → s3 sync --delete → CloudFront Invalidation</text>
+  <text x="210" y="650" class="s">Back: Gradle build → SCP(JAR) → systemctl restart nextplan</text>
+  <path d="M380,580 L380,450 L300,450 L300,358" class="cd"/>
+  <path d="M640,580 L640,560 L760,560 L760,330 L699,330" class="cd"/>
+  <path d="M400,580 L400,470 L420,470 L420,190 L500,190 L500,174" class="cd"/>
+  <text x="770" y="600" class="s" fill="#7c3aed">--- 배포 흐름</text>
+</svg>
